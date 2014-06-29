@@ -7,7 +7,7 @@ class NotSafeExpression(Exception):
 
 
 class Evaler(object):
-    SAFE_METHODS = (
+    ALLOWED_NODES = (
         _ast.Module,
         # math
         _ast.Add,
@@ -42,7 +42,7 @@ class Evaler(object):
         _ast.Num,
         _ast.Name,
         _ast.Load,
-        _ast.Call,
+        _ast.Call, # visit_Call makes the rest
     )
 
     def __init__(self, safe_funcs):
@@ -89,6 +89,6 @@ class Evaler(object):
             pass
 
         def generic_visit(self, node):
-            if type(node) not in Evaler.SAFE_METHODS:
+            if type(node) not in Evaler.ALLOWED_NODES:
                 raise NotSafeExpression()
             ast.NodeVisitor.generic_visit(self, node)
