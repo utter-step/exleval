@@ -28,7 +28,6 @@ class Evaler(object):
         _ast.Invert,
         # conditions
         _ast.Not,
-        _ast.If,
         _ast.IfExp,
         # base expressions
         _ast.Expr,
@@ -37,11 +36,7 @@ class Evaler(object):
         # structures
         _ast.Tuple,
         _ast.List,
-        _ast.ListComp,
         _ast.Dict,
-        _ast.DictComp,
-        _ast.Set,
-        _ast.SetComp,
         # system
         _ast.Num,
         _ast.Str,

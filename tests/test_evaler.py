@@ -27,6 +27,10 @@ good_code = (
     "max(1, 3, 2)",
     "abs(-2)",
     "min(abs(-2), max(abs(-4), sqrt(6)))",
+    "(4, 5, max(x, y))",
+    "[4, 5, min(x, sqrt(y) ** 2)]",
+    "{'a': a, 'x': x}",
+    "range(30)",
 )
 
 bad_code = (
@@ -56,7 +60,7 @@ very_bad_code = ("""
 )()
 """, "__import__('os').system('clear')",)
 
-evaler = Evaler((sqrt, min, max, abs))
+evaler = Evaler((sqrt, min, max, abs, range))
 
 
 @pytest.mark.parametrize('expr', good_code)
