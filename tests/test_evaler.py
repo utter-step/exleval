@@ -21,6 +21,8 @@ good_code = (
     "5 if x else y",
     "5 < a < 6",
     "a < 4 and a > 5",
+    "not x < y",
+    "a < 5 and not x > y",
     "min(1, 4, 3)",
     "max(1, 3, 2)",
     "abs(-2)",
@@ -28,6 +30,7 @@ good_code = (
 )
 
 bad_code = (
+    'type(x)',
     'SafeEvaler((min, max)).eval("min(1, 3)")',
     's = "string"',
     's.startswith("str")',

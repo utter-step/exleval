@@ -16,6 +16,7 @@ class Evaler(object):
         _ast.USub,
         _ast.Mult,
         _ast.Div,
+        _ast.FloorDiv,
         _ast.Pow,
         _ast.Mod,
         # binary math
@@ -26,6 +27,7 @@ class Evaler(object):
         _ast.BitXor,
         _ast.Invert,
         # conditions
+        _ast.Not,
         _ast.If,
         _ast.IfExp,
         # base expressions
@@ -38,8 +40,11 @@ class Evaler(object):
         _ast.ListComp,
         _ast.Dict,
         _ast.DictComp,
+        _ast.Set,
+        _ast.SetComp,
         # system
         _ast.Num,
+        _ast.Str,
         _ast.Name,
         _ast.Load,
         _ast.Call, # visit_Call makes the rest
