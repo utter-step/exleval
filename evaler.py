@@ -6,6 +6,10 @@ class NotSafeExpression(Exception):
     pass
 
 
+class UnsafeNode(Exception):
+    pass
+
+
 class Evaler(object):
     ALLOWED_NODES = (
         _ast.Module,
@@ -46,8 +50,11 @@ class Evaler(object):
     )
 
     def __init__(self, safe_funcs):
+        # to preserve ordering. OrderedDict is overkill here, I think
+        self.safe_func_names = [func.__name__ for func in safe_funcs]
+        self.checker = Evaler.IsExprSafe(self.safe_func_names)
+
         self.safe_funcs = {func.__name__: func for func in safe_funcs}
-        self.checker = Evaler.IsExprSafe(self.safe_funcs.keys())
 
     def eval(self, expr, variables=None):
         if variables is None:
@@ -57,11 +64,11 @@ class Evaler(object):
         try:
             self.checker.visit(ast_tree)
             return eval(expr, {'__builtins__': self.safe_funcs}, variables)
-        except NotSafeExpression:
-            raise NotSafeExpression(expr)
+        except UnsafeNode as e:
+            raise NotSafeExpression(expr, e)
 
     def __str__(self):
-        return "Evaler(%s)" % ", ".join(self.safe_funcs.keys())
+        return "Evaler((%s))" % ", ".join(self.safe_func_names)
 
     class IsExprSafe(ast.NodeVisitor):
         def __init__(self, safe_func_names):
@@ -76,9 +83,9 @@ class Evaler(object):
 
             if "id" in func.__dict__:
                 if func.id not in self.safe_func_names:
-                    raise NotSafeExpression()
+                    raise UnsafeNode(ast.dump(node))
             else:
-                raise NotSafeExpression()
+                raise UnsafeNode(ast.dump(node))
 
             self.generic_visit(node)
 
@@ -90,5 +97,5 @@ class Evaler(object):
 
         def generic_visit(self, node):
             if type(node) not in Evaler.ALLOWED_NODES:
-                raise NotSafeExpression()
+                raise UnsafeNode(ast.dump(node))
             ast.NodeVisitor.generic_visit(self, node)

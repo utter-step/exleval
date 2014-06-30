@@ -86,3 +86,7 @@ def test_bad(expr):
 def test_very_bad(expr):
     with pytest.raises(NotSafeExpression):
         evaler.eval(expr)
+
+
+def test_str():
+    assert str(evaler) == "Evaler((sqrt, min, max, abs, range))"
