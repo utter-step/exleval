@@ -46,7 +46,7 @@ class Evaler(object):
         _ast.Str,
         _ast.Name,
         _ast.Load,
-        _ast.Call, # visit_Call makes the rest
+        _ast.Call,  # visit_Call makes the rest
     )
 
     def __init__(self, safe_funcs):
@@ -69,6 +69,10 @@ class Evaler(object):
 
     def __str__(self):
         return "Evaler((%s))" % ", ".join(self.safe_func_names)
+
+    @staticmethod
+    def get_allowed_nodes():
+        return Evaler.ALLOWED_NODES
 
     class IsExprSafe(ast.NodeVisitor):
         def __init__(self, safe_func_names):
@@ -96,6 +100,6 @@ class Evaler(object):
             pass
 
         def generic_visit(self, node):
-            if type(node) not in Evaler.ALLOWED_NODES:
+            if type(node) not in Evaler.get_allowed_nodes():
                 raise UnsafeNode(ast.dump(node))
             ast.NodeVisitor.generic_visit(self, node)
