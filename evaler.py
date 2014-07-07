@@ -11,7 +11,7 @@ class UnsafeNode(Exception):
 
 
 class Evaler(object):
-    ALLOWED_NODES = (
+    ALLOWED_NODES = set((
         _ast.Module,
         # math
         _ast.Add,
@@ -47,7 +47,7 @@ class Evaler(object):
         _ast.Name,
         _ast.Load,
         _ast.Call,  # visit_Call makes the rest
-    )
+    ))
 
     def __init__(self, safe_funcs=None):
         if safe_funcs is None:

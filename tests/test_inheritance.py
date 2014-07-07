@@ -6,40 +6,16 @@ import _ast
 
 
 class NoBinaryEvaler(Evaler):
-    ALLOWED_NODES = (
-        _ast.Module,
-        # math
-        _ast.Add,
-        _ast.UAdd,
-        _ast.Sub,
-        _ast.USub,
-        _ast.Mult,
-        _ast.Div,
-        _ast.FloorDiv,
-        _ast.Pow,
-        _ast.Mod,
-        # conditions
-        _ast.Not,
-        _ast.IfExp,
-        # base expressions
-        _ast.Expr,
-        _ast.BinOp,
-        _ast.UnaryOp,
-        # structures
-        _ast.Tuple,
-        _ast.List,
-        _ast.Dict,
-        # system
-        _ast.Num,
-        _ast.Str,
-        _ast.Name,
-        _ast.Load,
-        _ast.Call,  # visit_Call makes the rest
-    )
-
     @staticmethod
     def get_allowed_nodes():
-        return NoBinaryEvaler.ALLOWED_NODES
+        return set(Evaler.get_allowed_nodes()) - set(
+            (_ast.LShift,
+             _ast.RShift,
+             _ast.BitAnd,
+             _ast.BitOr,
+             _ast.BitXor,
+             _ast.Invert,)
+        )
 
     bad_code = (
         "x ^ y",
@@ -51,8 +27,8 @@ class NoBinaryEvaler(Evaler):
 class ListComprehensionEvaler(Evaler):
     @staticmethod
     def get_allowed_nodes():
-        return (Evaler.get_allowed_nodes() +
-                (_ast.comprehension, _ast.ListComp, _ast.Store,)
+        return (Evaler.get_allowed_nodes() |
+                set((_ast.comprehension, _ast.ListComp, _ast.Store,))
                 )
 
     good_code = (
