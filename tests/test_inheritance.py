@@ -8,7 +8,7 @@ import _ast
 class NoBinaryEvaler(Evaler):
     @staticmethod
     def get_allowed_nodes():
-        return set(Evaler.get_allowed_nodes()) - set(
+        return Evaler.get_allowed_nodes() - set(
             (_ast.LShift,
              _ast.RShift,
              _ast.BitAnd,
@@ -27,9 +27,9 @@ class NoBinaryEvaler(Evaler):
 class ListComprehensionEvaler(Evaler):
     @staticmethod
     def get_allowed_nodes():
-        return (Evaler.get_allowed_nodes() |
-                set((_ast.comprehension, _ast.ListComp, _ast.Store,))
-                )
+        return Evaler.get_allowed_nodes() | set(
+            (_ast.comprehension, _ast.ListComp, _ast.Store,)
+        )
 
     good_code = (
         "[x for x in range(10)]",
