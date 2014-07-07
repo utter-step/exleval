@@ -34,6 +34,8 @@ good_code = (
     "[4, 5, min(x, sqrt(y) ** 2)]",
     "{'a': a, 'x': x}",
     "range(30)",
+    "5 < 3 or True",
+    "True and False",
 )
 
 bad_code = (

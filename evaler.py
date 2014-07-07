@@ -59,9 +59,13 @@ class Evaler(object):
 
         self.safe_funcs = {func.__name__: func for func in safe_funcs}
 
+        self.boolean_builtins = {"True": True, "False": False}
+
     def eval(self, expr, variables=None):
         if variables is None:
             variables = {}
+        variables.update(self.boolean_builtins)
+
         ast_tree = ast.parse(expr)
 
         try:
@@ -80,6 +84,8 @@ class Evaler(object):
         def __init__(self, evaler):
             self.evaler = evaler
             self.safe_func_names = evaler.safe_func_names
+
+            ast.NodeVisitor.__init__(self)
 
         def visit_Module(self, node):
             self.generic_visit(node)
