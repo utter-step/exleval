@@ -6,9 +6,8 @@ import _ast
 
 
 class NoBinaryEvaler(Evaler):
-    @staticmethod
-    def get_allowed_nodes():
-        return Evaler.get_allowed_nodes() - set(
+    def get_allowed_nodes(self):
+        return super(type(self), self).get_allowed_nodes() - set(
             (_ast.LShift,
              _ast.RShift,
              _ast.BitAnd,
@@ -25,9 +24,8 @@ class NoBinaryEvaler(Evaler):
 
 
 class ListComprehensionEvaler(Evaler):
-    @staticmethod
-    def get_allowed_nodes():
-        return Evaler.get_allowed_nodes() | set(
+    def get_allowed_nodes(self):
+        return super(type(self), self).get_allowed_nodes() | set(
             (_ast.comprehension, _ast.ListComp, _ast.Store,)
         )
 

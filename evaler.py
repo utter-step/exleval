@@ -73,9 +73,8 @@ class Evaler(object):
     def __str__(self):
         return "Evaler((%s))" % ", ".join(self.safe_func_names)
 
-    @staticmethod
-    def get_allowed_nodes():
-        return Evaler.ALLOWED_NODES
+    def get_allowed_nodes(self):
+        return self.ALLOWED_NODES
 
     class IsExprSafe(ast.NodeVisitor):
         def __init__(self, evaler):
