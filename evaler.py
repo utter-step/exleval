@@ -49,10 +49,13 @@ class Evaler(object):
         _ast.Call,  # visit_Call makes the rest
     )
 
-    def __init__(self, safe_funcs):
+    def __init__(self, safe_funcs=None):
+        if safe_funcs is None:
+            safe_funcs = []
+
         # to preserve ordering. OrderedDict is overkill here, I think
         self.safe_func_names = [func.__name__ for func in safe_funcs]
-        self.checker = Evaler.IsExprSafe(self.safe_func_names)
+        self.checker = Evaler.IsExprSafe(self)
 
         self.safe_funcs = {func.__name__: func for func in safe_funcs}
 
@@ -75,8 +78,9 @@ class Evaler(object):
         return Evaler.ALLOWED_NODES
 
     class IsExprSafe(ast.NodeVisitor):
-        def __init__(self, safe_func_names):
-            self.safe_func_names = safe_func_names
+        def __init__(self, evaler):
+            self.evaler = evaler
+            self.safe_func_names = evaler.safe_func_names
 
         def visit_Module(self, node):
             self.generic_visit(node)
@@ -100,6 +104,6 @@ class Evaler(object):
             pass
 
         def generic_visit(self, node):
-            if type(node) not in Evaler.get_allowed_nodes():
+            if type(node) not in self.evaler.get_allowed_nodes():
                 raise UnsafeNode(ast.dump(node))
             ast.NodeVisitor.generic_visit(self, node)
