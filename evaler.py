@@ -62,15 +62,15 @@ class Evaler(object):
         self.boolean_builtins = {"True": True, "False": False}
 
     def eval(self, expr, variables=None):
-        if variables is None:
-            variables = {}
-        variables.update(self.boolean_builtins)
+        locals = self.boolean_builtins
+        if variables is not None:
+            locals.update(variables)
 
         ast_tree = ast.parse(expr)
 
         try:
             self.checker.visit(ast_tree)
-            return eval(expr, {'__builtins__': self.safe_funcs}, variables)
+            return eval(expr, {'__builtins__': self.safe_funcs}, locals)
         except UnsafeNode as e:
             raise NotSafeExpression(expr, e)
 
