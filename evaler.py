@@ -1,3 +1,5 @@
+from __future__ import division
+
 import ast
 import _ast
 
@@ -49,7 +51,7 @@ class Evaler(object):
         _ast.Call,  # visit_Call makes the rest
     ))
 
-    def __init__(self, safe_funcs=None):
+    def __init__(self, safe_funcs=None, future_division=False):
         if safe_funcs is None:
             safe_funcs = []
 

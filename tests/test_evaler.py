@@ -95,3 +95,8 @@ def test_very_bad(expr):
 
 def test_str():
     assert str(evaler) == "Evaler((sqrt, min, max, abs, range))"
+
+
+def test_future():
+    assert evaler.eval("2 / 3") == 2 / 3.0
+    assert evaler.eval("2 // 3") == 2 / 3
