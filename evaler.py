@@ -64,23 +64,36 @@ class Evaler(object):
         self.boolean_builtins = {"True": True, "False": False}
 
     def eval(self, expr, variables=None):
-        locals = self.boolean_builtins
-        if variables is not None:
-            locals.update(variables)
+        unsafe = self.expr_is_unsafe(expr)
 
+        if not unsafe:
+
+
+            return
+        else:
+            raise NotSafeExpression(expr, unsafe)
+
+    def __str__(self):
+        return "Evaler([%s])" % ", ".join(self.safe_func_names)
+
+    def get_allowed_nodes(self):
+        return self.ALLOWED_NODES
+
+    def expr_is_unsafe(self, expr):
         ast_tree = ast.parse(expr)
 
         try:
             self.checker.visit(ast_tree)
-            return eval(expr, {'__builtins__': self.safe_funcs}, locals)
+            return None
         except UnsafeNode as e:
-            raise NotSafeExpression(expr, e)
+            return e
 
-    def __str__(self):
-        return "Evaler((%s))" % ", ".join(self.safe_func_names)
+    def raw_eval(self, expr, variables=None):
+        locals = self.boolean_builtins
+        if variables is not None:
+            locals.update(variables)
 
-    def get_allowed_nodes(self):
-        return self.ALLOWED_NODES
+        return eval(expr, {'__builtins__': self.safe_funcs}, locals)
 
     class IsExprSafe(ast.NodeVisitor):
         def __init__(self, evaler):
