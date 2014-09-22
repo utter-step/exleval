@@ -67,9 +67,7 @@ class Evaler(object):
         unsafe = self.expr_is_unsafe(expr)
 
         if not unsafe:
-
-
-            return
+            return self.raw_eval(expr, variables)
         else:
             raise NotSafeExpression(expr, unsafe)
 
