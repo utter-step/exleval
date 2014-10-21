@@ -94,7 +94,7 @@ def test_very_bad(expr):
 
 
 def test_str():
-    assert str(evaler) == "Evaler((sqrt, min, max, abs, range))"
+    assert str(evaler) == "Evaler([sqrt, min, max, abs, range])"
 
 
 def test_future():
