@@ -87,7 +87,7 @@ class Evaler(object):
             return e
 
     def raw_eval(self, expr, variables=None):
-        locals = self.boolean_builtins
+        locals = dict(self.boolean_builtins)
         if variables is not None:
             locals.update(variables)
 
