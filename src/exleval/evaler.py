@@ -96,7 +96,7 @@ class Evaler(object):
     class IsExprSafe(ast.NodeVisitor):
         def __init__(self, evaler):
             self.evaler = evaler
-            self.safe_func_names = evaler.safe_func_names
+            self.safe_func_names = set(evaler.safe_func_names)
 
             ast.NodeVisitor.__init__(self)
 

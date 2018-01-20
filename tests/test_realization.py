@@ -1,5 +1,6 @@
 import pytest
-from .. import Evaler
+
+from evaler import Evaler
 
 
 def test_preserving_variables_clean():

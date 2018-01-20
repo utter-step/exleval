@@ -1,9 +1,8 @@
-import pytest
-
-from .. import Evaler, NotSafeExpression
-
 import _ast
 
+import pytest
+
+from exleval import Evaler, NotSafeExpression
 
 class NoBinaryEvaler(Evaler):
     def get_allowed_nodes(self):

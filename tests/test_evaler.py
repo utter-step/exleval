@@ -1,7 +1,7 @@
 import pytest
 from math import sqrt
 
-from .. import Evaler, NotSafeExpression
+from exleval import Evaler, NotSafeExpression
 
 good_code = (
     "-x",
