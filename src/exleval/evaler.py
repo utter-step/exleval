@@ -3,6 +3,13 @@ from __future__ import division
 import ast
 import _ast
 
+try:
+    # Python 3+
+    NameConstant = _ast.NameConstant
+except AttributeError:
+    # Python 2.7
+    NameConstant = _ast.Name
+
 
 class NotSafeExpression(Exception):
     pass
@@ -47,6 +54,10 @@ class Evaler(object):
         _ast.LtE,
         _ast.Gt,
         _ast.GtE,
+        _ast.Is,
+        _ast.IsNot,
+        _ast.In,
+        _ast.NotIn,
         # structures
         _ast.Tuple,
         _ast.List,
@@ -55,7 +66,7 @@ class Evaler(object):
         _ast.Num,
         _ast.Str,
         _ast.Name,
-        _ast.NameConstant,  # True, False, None
+        NameConstant,  # True, False, None in Python 3+
         _ast.Load,
         _ast.Call,  # visit_Call makes the rest
     }
