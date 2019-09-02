@@ -39,6 +39,14 @@ class Evaler(object):
         _ast.Expr,
         _ast.BinOp,
         _ast.UnaryOp,
+        # comparisons
+        _ast.Compare,
+        _ast.Eq,
+        _ast.NotEq,
+        _ast.Lt,
+        _ast.LtE,
+        _ast.Gt,
+        _ast.GtE,
         # structures
         _ast.Tuple,
         _ast.List,
@@ -47,6 +55,7 @@ class Evaler(object):
         _ast.Num,
         _ast.Str,
         _ast.Name,
+        _ast.NameConstant,  # True, False, None
         _ast.Load,
         _ast.Call,  # visit_Call makes the rest
     }
@@ -116,10 +125,14 @@ class Evaler(object):
             self.generic_visit(node)
 
         def visit_Compare(self, node):
-            pass
+            operands = node.comparators + [node.left]
+
+            for op in operands:
+                self.generic_visit(op)
 
         def visit_BoolOp(self, node):
-            pass
+            for val in node.values:
+                self.generic_visit(val)
 
         def generic_visit(self, node):
             if type(node) not in self.evaler.get_allowed_nodes():

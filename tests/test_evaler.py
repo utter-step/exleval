@@ -36,6 +36,7 @@ good_code = (
     "range(30)",
     "5 < 3 or True",
     "True and False",
+    "None or True",
 )
 
 bad_code = (
@@ -45,7 +46,7 @@ bad_code = (
     's.startswith("str")',
     's.__name__',
     'eval("print 3")',
-    'print 6',
+    'print(6)',
     'max(eval("2"), 3)',
 )
 
@@ -63,34 +64,41 @@ very_bad_code = ("""
         ),{}
     )()
 )()
-""", "__import__('os').system('clear')",)
+""",
+    "__import__('os').system('clear')",
+    "x == [c for c in ().__class__.__base__.__subclasses__() if c.__name__ == 'IncrementalEncoder'][0].__init__.__globals__['sys'].modules['os'].system('echo \\'zzz\\' > /tmp/lozpwn')",
+)
 
 evaler = Evaler((sqrt, min, max, abs, range))
 
 
 @pytest.mark.parametrize('expr', good_code)
 def test_good(expr):
-    evaler.eval(expr,
-                {"x": 5,
-                 "y": 6,
-                 "a": 3}
-                )
+    evaler.eval(expr, {
+        "x": 5,
+        "y": 6,
+        "a": 3,
+    })
 
 
 @pytest.mark.parametrize('expr', bad_code)
 def test_bad(expr):
     with pytest.raises(NotSafeExpression):
-        evaler.eval(expr,
-                    {"x": 5,
-                     "y": 6,
-                     "a": 3}
-                    )
+        evaler.eval(expr, {
+            "x": 5,
+            "y": 6,
+            "a": 3,
+        })
 
 
 @pytest.mark.parametrize('expr', very_bad_code)
 def test_very_bad(expr):
     with pytest.raises(NotSafeExpression):
-        evaler.eval(expr)
+        evaler.eval(expr, {
+            "x": 5,
+            "y": 6,
+            "a": 3,
+        })
 
 
 def test_str():
@@ -99,4 +107,4 @@ def test_str():
 
 def test_future():
     assert evaler.eval("2 / 3") == 2 / 3.0
-    assert evaler.eval("2 // 3") == 2 / 3
+    assert evaler.eval("2 // 3") == 2 // 3

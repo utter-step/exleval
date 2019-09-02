@@ -1,6 +1,6 @@
 import pytest
 
-from evaler import Evaler
+from exleval import Evaler
 
 
 def test_preserving_variables_clean():

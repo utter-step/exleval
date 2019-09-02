@@ -30,7 +30,7 @@ class ListComprehensionEvaler(Evaler):
 
     good_code = (
         "[x for x in range(10)]",
-        "[x ** 2 for x in xrange(10)]",
+        "[x ** 2 for x in range(10)]",
         "[10 - x for x in some_iterable]",
     )
 
@@ -62,7 +62,7 @@ class OnlyNamesAndAdditionEvaler(Evaler):
 
 
 nb_evaler = NoBinaryEvaler()
-lc_evaler = ListComprehensionEvaler((range, xrange))
+lc_evaler = ListComprehensionEvaler((range, ))
 ona_evaler = OnlyNamesAndAdditionEvaler()
 
 
@@ -77,7 +77,7 @@ def test_NoBinary(expr):
 
 @pytest.mark.parametrize('expr', ListComprehensionEvaler.good_code)
 def test_ListComprehencion(expr):
-    lc_evaler.eval(expr, {"some_iterable": (x ** 0.5 for x in xrange(10))})
+    lc_evaler.eval(expr, {"some_iterable": (x ** 0.5 for x in range(10))})
 
 
 @pytest.mark.parametrize('expr,good', OnlyNamesAndAdditionEvaler.test_code)

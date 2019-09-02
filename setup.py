@@ -4,7 +4,7 @@ setup(
     name='exleval',
     author='Vlad Stepanov',
     author_email='8uk.8ak@gmail.com',
-    version='0.1.1',
+    version='0.1.2',
     package_dir={'': 'src'},
     packages=['exleval'],
     classifiers=[
